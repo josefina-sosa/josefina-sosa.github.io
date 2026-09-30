@@ -1,0 +1,429 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="description" content="Portfolio de análisis de datos de Josefina Sosa, Ingeniera Biomédica y Analista de Datos: Power BI, SQL y Python.">
+<title>Josefina Sosa · Portfolio de Datos</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Newsreader:opsz,wght@6..72,400;6..72,500;6..72,600&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: una columna editorial de ~1080px; un caso destacado con franja de KPIs tipo "signos vitales", galería con pestañas, y módulos secundarios más sobrios. */
+:root {
+  --paper: #F5F7F6;
+  --surface: #FFFFFF;
+  --ink: #16211F;
+  --muted: #56645F;
+  --line: #D5DCD9;
+  --accent: #0D6A61;
+  --accent-soft: #E0EEEB;
+  --alert: #B0463A;
+  --code-bg: #EEF2F0;
+  --f-display: "Newsreader", Georgia, "Times New Roman", serif;
+  --f-body: "IBM Plex Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --f-mono: "IBM Plex Mono", ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
+  --shadow: 0 1px 2px rgba(16, 33, 30, .06), 0 8px 24px rgba(16, 33, 30, .06);
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --paper: #0F1615; --surface: #152020; --ink: #E4ECE9; --muted: #98A7A2; --line: #26332F;
+    --accent: #5CC3B5; --accent-soft: #16302D; --alert: #E58073; --code-bg: #111C1A;
+    --shadow: 0 1px 2px rgba(0,0,0,.3), 0 8px 24px rgba(0,0,0,.25);
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --paper: #0F1615; --surface: #152020; --ink: #E4ECE9; --muted: #98A7A2; --line: #26332F;
+  --accent: #5CC3B5; --accent-soft: #16302D; --alert: #E58073; --code-bg: #111C1A;
+  --shadow: 0 1px 2px rgba(0,0,0,.3), 0 8px 24px rgba(0,0,0,.25);
+  color-scheme: dark;
+}
+
+* { box-sizing: border-box; }
+[hidden] { display: none !important; }
+html { color-scheme: light; }
+body {
+  margin: 0;
+  background: var(--paper); color: var(--ink);
+  font: 400 1rem/1.6 var(--f-body);
+  padding-inline: 20px; padding-block: 0 64px;
+  -webkit-font-smoothing: antialiased;
+}
+.wrap { max-width: 1080px; margin: 0 auto; display: grid; gap: 72px; }
+h1, h2, h3 { font-family: var(--f-display); font-weight: 500; text-wrap: balance; margin: 0; letter-spacing: -0.01em; }
+p { margin: 0; }
+a { color: var(--accent); text-underline-offset: 3px; }
+a:focus-visible, button:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; border-radius: 4px; }
+.eyebrow { font: 500 .75rem/1 var(--f-mono); letter-spacing: .12em; text-transform: uppercase; color: var(--accent); }
+.lede { color: var(--muted); max-width: 62ch; font-size: 1.0625rem; }
+.prose { display: grid; gap: 14px; max-width: 68ch; }
+.chips { display: flex; flex-wrap: wrap; gap: 8px; list-style: none; padding: 0; margin: 0; }
+.chips li { font: 500 .8125rem/1 var(--f-mono); padding: 7px 10px; border: 1px solid var(--line); border-radius: 999px; color: var(--ink); background: var(--surface); }
+
+/* Hero */
+header.hero { padding-top: 64px; display: grid; gap: 22px; border-bottom: 1px solid var(--line); padding-bottom: 48px; }
+.hero h1 { font-size: clamp(2.6rem, 6vw, 4.25rem); line-height: 1.02; }
+.hero .role { font: 400 clamp(1.15rem, 2.2vw, 1.4rem)/1.35 var(--f-display); font-style: italic; color: var(--muted); }
+.contact { display: flex; flex-wrap: wrap; gap: 10px 22px; font-size: .9375rem; color: var(--muted); }
+.contact span, .contact a { white-space: nowrap; }
+.contact .sel { user-select: all; color: var(--ink); }
+
+/* Section header */
+.sec-head { display: grid; gap: 10px; margin-bottom: 28px; }
+.sec-head h2 { font-size: clamp(1.75rem, 3.6vw, 2.5rem); line-height: 1.1; }
+
+/* Featured case */
+.case { display: grid; gap: 36px; }
+.meta { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); padding-block: 18px; }
+.meta dt { font: 500 .72rem/1.2 var(--f-mono); letter-spacing: .1em; text-transform: uppercase; color: var(--muted); margin-bottom: 6px; }
+.meta dd { margin: 0; font-size: .9375rem; }
+
+.vitals { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); background: var(--surface); border: 1px solid var(--line); border-radius: 10px; overflow: hidden; }
+.vital { padding: 20px 20px 18px; display: grid; gap: 6px; border-left: 1px solid var(--line); min-width: 0; }
+.vital:first-child { border-left: 0; }
+.vital .v { font: 500 clamp(1.6rem, 3vw, 2.2rem)/1 var(--f-display); font-variant-numeric: tabular-nums; }
+.vital .l { font-size: .8125rem; color: var(--muted); line-height: 1.35; }
+.vital.alert .v { color: var(--alert); }
+.vitals.three { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.vitals-note { font-size: .8125rem; color: var(--muted); margin-top: 10px; }
+
+/* Gallery */
+.gallery { display: grid; gap: 14px; }
+.tabs { display: flex; flex-wrap: wrap; gap: 6px; }
+.tab { font: 500 .875rem/1 var(--f-body); padding: 10px 14px; border-radius: 8px; border: 1px solid var(--line); background: transparent; color: var(--muted); cursor: pointer; }
+.tab[aria-selected="true"] { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+.shot { margin: 0; display: grid; gap: 12px; }
+.shot button.zoom { padding: 0; border: 1px solid var(--line); border-radius: 10px; overflow: hidden; background: var(--surface); cursor: zoom-in; box-shadow: var(--shadow); display: block; width: 100%; }
+.shot img { display: block; width: 100%; height: auto; }
+.shot figcaption { font-size: .9375rem; color: var(--muted); max-width: 72ch; }
+
+.two { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 40px; }
+.two h3 { font-size: 1.35rem; margin-bottom: 12px; }
+ul.findings { margin: 0; padding-left: 1.1em; display: grid; gap: 10px; }
+ul.findings li::marker { color: var(--accent); }
+
+/* KPI table */
+.table-wrap { overflow-x: auto; border: 1px solid var(--line); border-radius: 10px; background: var(--surface); }
+table { border-collapse: collapse; width: 100%; min-width: 620px; font-size: .9rem; }
+th, td { text-align: left; padding: 11px 14px; border-bottom: 1px solid var(--line); vertical-align: top; }
+th { font: 500 .72rem/1.2 var(--f-mono); letter-spacing: .1em; text-transform: uppercase; color: var(--muted); background: var(--code-bg); }
+tr:last-child td { border-bottom: 0; }
+td code { font: .82rem/1.4 var(--f-mono); color: var(--accent); }
+
+details.kpis summary { cursor: pointer; font-weight: 500; color: var(--accent); margin-bottom: 14px; }
+
+/* Secondary modules */
+.module { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 6fr); gap: 40px; align-items: start; }
+.module .prose h3 { font-size: 1.5rem; }
+pre.sql { margin: 0; background: var(--code-bg); border: 1px solid var(--line); border-radius: 10px; padding: 16px 18px; overflow-x: auto; font: .82rem/1.6 var(--f-mono); color: var(--ink); }
+pre.sql .c { color: var(--muted); }
+pre.sql .k { color: var(--accent); font-weight: 500; }
+.stack { display: grid; gap: 14px; min-width: 0; }
+
+.mini { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 16px; }
+.mini article { border: 1px solid var(--line); border-radius: 10px; padding: 20px; background: var(--surface); display: grid; gap: 8px; align-content: start; }
+.mini .tag { font: 500 .72rem/1 var(--f-mono); letter-spacing: .1em; text-transform: uppercase; color: var(--muted); }
+.mini h3 { font-size: 1.2rem; line-height: 1.25; }
+.mini p { font-size: .9375rem; color: var(--muted); }
+
+footer { border-top: 1px solid var(--line); padding-top: 32px; display: grid; gap: 14px; }
+footer h2 { font-size: 1.6rem; }
+
+/* Lightbox */
+dialog.lb { border: 0; padding: 0; background: transparent; max-width: min(96vw, 1500px); width: 100%; }
+dialog.lb::backdrop { background: rgba(8, 14, 13, .82); }
+dialog.lb img { width: 100%; height: auto; border-radius: 8px; display: block; background: #fff; }
+dialog.lb button { position: absolute; top: 8px; right: 8px; font: 500 .875rem var(--f-body); background: rgba(0,0,0,.65); color: #fff; border: 0; border-radius: 6px; padding: 8px 12px; cursor: pointer; }
+
+@media (max-width: 820px) {
+  .two, .module { grid-template-columns: 1fr; gap: 28px; }
+  .vitals { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .vital:nth-child(3) { border-left: 0; }
+  .vital:nth-child(n+3) { border-top: 1px solid var(--line); }
+  .vitals.three { grid-template-columns: 1fr; }
+  .vitals.three .vital { border-left: 0; border-top: 1px solid var(--line); }
+  .vitals.three .vital:first-child { border-top: 0; }
+}
+@media (max-width: 480px) {
+  body { padding-inline: 16px; }
+  header.hero { padding-top: 40px; }
+  .wrap { gap: 56px; }
+}
+@media (prefers-reduced-motion: no-preference) {
+  .shot img { transition: opacity .2s ease; }
+}
+</style>
+</head>
+<body>
+
+
+<div class="wrap">
+
+  <header class="hero">
+    <span class="eyebrow">Portfolio de análisis de datos</span>
+    <h1>Josefina Sosa</h1>
+    <p class="role">Ingeniera Biomédica · Analista de Datos</p>
+    <p class="lede">Construyo tableros e indicadores que convierten datos operativos en decisiones. Esta página reúne los trabajos finales de la Diplomatura en Data Analytics (ICARO), con foco en gestión hospitalaria, modelado de datos y SQL.</p>
+    <div class="contact">
+      <span>Córdoba, Argentina</span>
+      <span class="sel">josefinasosa191@gmail.com</span>
+      <span>+54 9 388 574-4632</span>
+      <a href="https://www.linkedin.com/in/josefinasosa-49193a293" target="_blank" rel="noopener">LinkedIn</a>
+      <a href="https://drive.google.com/drive/folders/1Is0sEDPgFc87gL1MkhVE_IMyu-FFbcd6" target="_blank" rel="noopener">Archivos originales (Drive)</a>
+    </div>
+  </header>
+
+  <!-- Caso destacado -->
+  <section class="case" aria-labelledby="c1">
+    <div class="sec-head">
+      <span class="eyebrow">Caso destacado · Módulo 2</span>
+      <h2 id="c1">Gestión de turnos e impacto en ingresos hospitalarios</h2>
+      <p class="lede">Análisis de un año de operación de una clínica de tamaño medio para medir cuántos turnos no se concretan y cuánto dinero representa esa pérdida, más lo que se factura y no se cobra.</p>
+    </div>
+
+    <dl class="meta">
+      <div><dt>Pregunta</dt><dd>¿Cuánto cuestan las cancelaciones y ausencias, y dónde se concentran?</dd></div>
+      <div><dt>Datos</dt><dd><a href="https://www.kaggle.com/datasets/kanakbaghel/hospital-management-dataset" target="_blank" rel="noopener">Hospital Management Dataset</a> (Kaggle): 5 tablas CSV de pacientes, turnos, médicos, tratamientos y facturación</dd></div>
+      <div><dt>Público</dt><dd>Dirección hospitalaria y Gerencia de Operaciones</dd></div>
+      <div><dt>Herramientas</dt><dd>Python (pandas, Matplotlib) en Google Colab · Power BI (DAX, modelado)</dd></div>
+    </dl>
+
+    <div>
+      <div class="vitals" role="list">
+        <div class="vital" role="listitem"><span class="v">200</span><span class="l">turnos registrados en el período</span></div>
+        <div class="vital alert" role="listitem"><span class="v">52 %</span><span class="l">no se realizaron (103 turnos cancelados o ausentes)</span></div>
+        <div class="vital alert" role="listitem"><span class="v">$283.894</span><span class="l">ingresos estimados perdidos por turnos no realizados</span></div>
+        <div class="vital" role="listitem"><span class="v">$377.825</span><span class="l">monto facturado no cobrado (pagos pendientes y fallidos)</span></div>
+      </div>
+      <p class="vitals-note">Sobre ingresos totales de $551.250 y un ingreso promedio de $2.756 por turno. Montos en la unidad monetaria del dataset, que es simulado.</p>
+    </div>
+
+    <div class="gallery">
+      <div class="tabs" role="tablist" aria-label="Páginas del tablero">
+        <button class="tab" role="tab" id="t-ov" aria-controls="p-ov" aria-selected="true">Visión general</button>
+        <button class="tab" role="tab" id="t-nr" aria-controls="p-nr" aria-selected="false" tabindex="-1">Turnos no realizados</button>
+        <button class="tab" role="tab" id="t-fi" aria-controls="p-fi" aria-selected="false" tabindex="-1">Análisis financiero</button>
+        <button class="tab" role="tab" id="t-eda" aria-controls="p-eda" aria-selected="false" tabindex="-1">EDA en Python</button>
+      </div>
+
+      <figure class="shot" role="tabpanel" id="p-ov" aria-labelledby="t-ov">
+        <button class="zoom" type="button" aria-label="Ampliar captura de la visión general"><img src="img/overview.webp" width="1262" height="717" alt="Tablero de Power BI con KPIs de ingresos y turnos, volumen mensual de turnos con variación intermensual, turnos por especialidad, por sede y estado de turno."></button>
+        <figcaption>KPIs principales, volumen mensual de turnos con variación intermensual y un tooltip con los no realizados, distribución por especialidad y sede, y estado de los turnos.</figcaption>
+      </figure>
+      <figure class="shot" role="tabpanel" id="p-nr" aria-labelledby="t-nr" hidden>
+        <button class="zoom" type="button" aria-label="Ampliar captura de turnos no realizados"><img src="img/no-realizados.webp" width="1259" height="716" alt="Página del tablero con turnos no realizados por mes, por especialidad, por día de la semana y por profesional." loading="lazy"></button>
+        <figcaption>Cancelaciones y ausencias por mes, especialidad, día de la semana y profesional, para detectar dónde y cuándo se pierde la agenda.</figcaption>
+      </figure>
+      <figure class="shot" role="tabpanel" id="p-fi" aria-labelledby="t-fi" hidden>
+        <button class="zoom" type="button" aria-label="Ampliar captura del análisis financiero"><img src="img/financiero.webp" width="1260" height="712" alt="Página financiera del tablero con ingresos por mes, especialidad y tratamiento, estado de pago y métodos de pago." loading="lazy"></button>
+        <figcaption>Ingresos por mes, especialidad y tratamiento, estado de los pagos y métodos de pago. Un tooltip separa los montos pendientes de los fallidos.</figcaption>
+      </figure>
+      <figure class="shot" role="tabpanel" id="p-eda" aria-labelledby="t-eda" hidden>
+        <button class="zoom" type="button" aria-label="Ampliar boxplots del EDA"><img src="img/boxplot.webp" width="1691" height="511" alt="Diagramas de caja del costo de tratamiento y del monto facturado, sin valores atípicos." loading="lazy"></button>
+        <figcaption>Control de calidad previo al tablero: tipos de datos, nulos, duplicados y valores atípicos con el método IQR. Ninguna tabla presentó nulos, duplicados ni outliers en costos y montos.</figcaption>
+      </figure>
+    </div>
+
+    <div class="two">
+      <div>
+        <h3>Hallazgos</h3>
+        <ul class="findings">
+          <li>Más de la mitad de la capacidad agendada no se usa: el 52 % de los turnos no se concreta.</li>
+          <li>El problema es transversal. Pediatría, Dermatología y Oncología tienen niveles similares de cancelaciones y ausencias.</li>
+          <li>Pediatría concentra el mayor volumen de turnos (49 %) y también la mayor facturación.</li>
+          <li>Las inasistencias siguen patrones por día de la semana y por profesional, que sirven para planificar la agenda.</li>
+        </ul>
+      </div>
+      <div>
+        <h3>Recomendaciones</h3>
+        <ul class="findings">
+          <li>Recordatorios de turno por SMS o correo para bajar el ausentismo.</li>
+          <li>Revisar la agenda de los profesionales con más turnos no realizados.</li>
+          <li>Priorizar la gestión de pagos pendientes y fallidos.</li>
+          <li>Seguir estos indicadores de forma continua para medir el efecto de las mejoras.</li>
+        </ul>
+      </div>
+    </div>
+
+    <details class="kpis">
+      <summary>Ver las definiciones de los 10 indicadores del tablero</summary>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Indicador</th><th>Fórmula</th><th>Para qué sirve</th></tr></thead>
+          <tbody>
+            <tr><td>Ingresos totales</td><td><code>Σ montos facturados</code></td><td>Desempeño financiero del período.</td></tr>
+            <tr><td>Total de turnos</td><td><code>COUNT(turnos)</code></td><td>Nivel de actividad del sistema de turnos.</td></tr>
+            <tr><td>Turnos no realizados</td><td><code>cancelados + ausentes</code></td><td>Volumen de ineficiencia operativa.</td></tr>
+            <tr><td>% turnos no realizados</td><td><code>no realizados / total</code></td><td>Indicador clave de eficiencia de la agenda.</td></tr>
+            <tr><td>Ingreso promedio por turno</td><td><code>ingresos / total turnos</code></td><td>Valor económico de cada turno programado.</td></tr>
+            <tr><td>Ingresos perdidos</td><td><code>promedio × no realizados</code></td><td>Estimación de lo que se deja de percibir.</td></tr>
+            <tr><td>Monto no cobrado</td><td><code>Σ montos Pending + Failed</code></td><td>Problemas en el proceso de cobranza.</td></tr>
+            <tr><td>Variación % de turnos</td><td><code>(mes − mes ant.) / mes ant.</code></td><td>Tendencia mensual de la demanda.</td></tr>
+            <tr><td>Variación % de no realizados</td><td><code>(mes − mes ant.) / mes ant.</code></td><td>Si la gestión de la agenda mejora o empeora.</td></tr>
+            <tr><td>Variación % de ingresos</td><td><code>(mes − mes ant.) / mes ant.</code></td><td>Evolución de la facturación.</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </details>
+  </section>
+
+  <!-- Módulo 3 -->
+  <section aria-labelledby="c2">
+    <div class="sec-head">
+      <span class="eyebrow">Módulo 3 · Bases de datos</span>
+      <h2 id="c2">Modelado relacional y consultas SQL</h2>
+    </div>
+    <div class="module">
+      <div class="prose">
+        <p>Normalicé una tabla de órdenes de venta hasta un modelo entidad-relación con Cliente, Orden, Artículo y una tabla Detalle_Orden que resuelve la relación muchos a muchos con clave primaria compuesta.</p>
+        <p>Después cargué la base <em>Jardinería</em> en MySQL, generé su diagrama por ingeniería inversa en MySQL Workbench y resolví 10 consultas de negocio: filtros, agregaciones, <code>JOIN</code> y <code>LEFT JOIN</code> para incluir clientes sin representante asignado.</p>
+        <ul class="chips" aria-label="Herramientas">
+          <li>MySQL</li><li>MySQL Workbench</li><li>SQL</li><li>Normalización</li><li>MER / DER</li>
+        </ul>
+      </div>
+      <div class="stack">
+        <figure class="shot">
+          <button class="zoom" type="button" aria-label="Ampliar el diagrama entidad-relación"><img src="img/der.webp" width="986" height="956" alt="Diagrama entidad-relación de la base Jardinería con las tablas pedido, detalle_pedido, producto, gama_producto, cliente, empleado, oficina y pago." loading="lazy"></button>
+          <figcaption>DER de la base Jardinería: 8 tablas con claves primarias, foráneas y cardinalidades.</figcaption>
+        </figure>
+      </div>
+    </div>
+    <div class="two" style="margin-top:32px">
+<pre class="sql" aria-label="Consulta SQL con LEFT JOIN"><span class="c">-- Todos los clientes con su representante de ventas,
+-- incluidos los que no tienen uno asignado</span>
+<span class="k">SELECT</span> c.nombre_cliente <span class="k">AS</span> 'Cliente',
+       CONCAT(e.nombre, ' ', e.apellido1, ' ', e.apellido2)
+         <span class="k">AS</span> 'Representante de ventas'
+<span class="k">FROM</span> cliente c
+<span class="k">LEFT JOIN</span> empleado e
+  <span class="k">ON</span> c.codigo_empleado_rep_ventas = e.codigo_empleado;</pre>
+<pre class="sql" aria-label="Consultas SQL con agregación y JOIN"><span class="c">-- Cantidad de empleados por puesto</span>
+<span class="k">SELECT</span> puesto, <span class="k">COUNT</span>(*) <span class="k">AS</span> 'Cantidad de empleados'
+<span class="k">FROM</span> empleado
+<span class="k">GROUP BY</span> puesto;
+
+<span class="c">-- Clientes que pagaron en 2008, sin duplicados</span>
+<span class="k">SELECT DISTINCT</span> p.codigo_cliente, c.nombre_cliente
+<span class="k">FROM</span> pago p
+<span class="k">JOIN</span> cliente c <span class="k">ON</span> p.codigo_cliente = c.codigo_cliente
+<span class="k">WHERE</span> <span class="k">YEAR</span>(p.fecha_pago) = 2008;</pre>
+    </div>
+  </section>
+
+  <!-- Módulo 1 -->
+  <section aria-labelledby="c4">
+    <div class="sec-head">
+      <span class="eyebrow">Módulo 1 · Power BI · Diciembre 2025</span>
+      <h2 id="c4">Dashboard financiero de ventas</h2>
+      <p class="lede">Tablero de rentabilidad para una empresa de distribución de productos: cuánto se factura, cuánto cuesta, qué deja ganancia y por qué vía se envía.</p>
+    </div>
+    <div class="module">
+      <div class="prose">
+        <p>Modelé los datos en un esquema con tabla de calendario, pedidos, detalle de pedidos, productos, categorías, empleados y países por continente. Una de las fuentes es una consulta SQL de pedidos.</p>
+        <p>Escribí medidas en DAX para facturación total, costos totales, rentabilidad, tasa anual y la participación de cada vía de envío (aérea, marítima y terrestre).</p>
+        <ul class="chips" aria-label="Herramientas">
+          <li>Power BI</li><li>DAX</li><li>Modelado estrella</li><li>Tabla calendario</li><li>SQL</li>
+        </ul>
+      </div>
+      <div class="vitals three" role="list">
+        <div class="vital" role="listitem"><span class="v">$2,46 M</span><span class="l">facturación total 2009–2020</span></div>
+        <div class="vital" role="listitem"><span class="v">$1,40 M</span><span class="l">rentabilidad total</span></div>
+        <div class="vital" role="listitem"><span class="v">4.612</span><span class="l">ventas analizadas</span></div>
+      </div>
+    </div>
+
+    <div class="gallery" style="margin-top:32px">
+      <div class="tabs" role="tablist" aria-label="Páginas del dashboard financiero">
+        <button class="tab" role="tab" id="t-m1a" aria-controls="p-m1a" aria-selected="true">Resumen anual</button>
+        <button class="tab" role="tab" id="t-m1b" aria-controls="p-m1b" aria-selected="false" tabindex="-1">Productos y márgenes</button>
+      </div>
+      <figure class="shot" role="tabpanel" id="p-m1a" aria-labelledby="t-m1a">
+        <button class="zoom" type="button" aria-label="Ampliar captura del resumen anual"><img src="img/m1-resumen.webp" width="1319" height="745" alt="Página de Power BI con facturación anual, tasa de variación, mapa de rentabilidad por país, rentabilidad por empleado, envíos por vía y top 5 clientes." loading="lazy"></button>
+        <figcaption>Facturación, costos y rentabilidad por año con su variación, rentabilidad por país y por empleado, participación de cada vía de envío y los 5 clientes más rentables.</figcaption>
+      </figure>
+      <figure class="shot" role="tabpanel" id="p-m1b" aria-labelledby="t-m1b" hidden>
+        <button class="zoom" type="button" aria-label="Ampliar captura de productos y márgenes"><img src="img/m1-productos.webp" width="1316" height="740" alt="Página de Power BI con ingresos contra objetivo, top 7 productos, top 3 categorías por año, árbol de descomposición de la rentabilidad y análisis mensual de ingresos y costos." loading="lazy"></button>
+        <figcaption>Ingresos contra objetivo, productos y categorías más rentables, un árbol de descomposición por categoría, producto y cliente, y la evolución mensual de ingresos contra costos.</figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <!-- Otros -->
+  <section aria-labelledby="c3">
+    <div class="sec-head">
+      <span class="eyebrow">Más trabajos</span>
+      <h2 id="c3">Otros proyectos</h2>
+    </div>
+    <div class="mini">
+      <article>
+        <span class="tag">Machine learning · Python</span>
+        <h3>Clasificación de glóbulos blancos</h3>
+        <p>Trabajo final del curso de Machine Learning e Imágenes en Python (FCEFyN, UNC): clasificación de imágenes de células sanguíneas.</p>
+      </article>
+      <article>
+        <span class="tag">Proyecto integrador · UNC</span>
+        <h3>Asignación personalizada de frecuencias en implantes cocleares</h3>
+        <p>Método basado en reconstrucción virtual 3D para asignar frecuencias según la anatomía de cada paciente.</p>
+      </article>
+      <article>
+        <span class="tag">Emprendimiento · 2024</span>
+        <h3>Nasalys</h3>
+        <p>Test de olfato para el diagnóstico precoz de enfermedades neurodegenerativas. Primer puesto, categoría Under 25, Emprende U 2024.</p>
+      </article>
+    </div>
+  </section>
+
+  <footer>
+    <h2>Contacto</h2>
+    <div class="contact">
+      <span class="sel">josefinasosa191@gmail.com</span>
+      <span>+54 9 388 574-4632</span>
+      <a href="https://www.linkedin.com/in/josefinasosa-49193a293" target="_blank" rel="noopener">linkedin.com/in/josefinasosa-49193a293</a>
+    </div>
+  </footer>
+</div>
+
+<dialog class="lb" id="lb" aria-label="Imagen ampliada">
+  <button type="button" id="lb-close">Cerrar</button>
+  <img id="lb-img" alt="">
+</dialog>
+
+<script>
+(function () {
+  document.querySelectorAll('[role="tablist"]').forEach(function (list) {
+    var tabs = Array.prototype.slice.call(list.querySelectorAll('.tab'));
+    function select(t) {
+      tabs.forEach(function (x) {
+        var on = x === t;
+        x.setAttribute('aria-selected', on ? 'true' : 'false');
+        x.tabIndex = on ? 0 : -1;
+        document.getElementById(x.getAttribute('aria-controls')).hidden = !on;
+      });
+    }
+    tabs.forEach(function (t, i) {
+      t.addEventListener('click', function () { select(t); });
+      t.addEventListener('keydown', function (e) {
+        var d = e.key === 'ArrowRight' ? 1 : e.key === 'ArrowLeft' ? -1 : 0;
+        if (!d) return;
+        var n = tabs[(i + d + tabs.length) % tabs.length];
+        select(n); n.focus(); e.preventDefault();
+      });
+    });
+  });
+
+  var lb = document.getElementById('lb'), lbImg = document.getElementById('lb-img');
+  document.querySelectorAll('button.zoom').forEach(function (b) {
+    b.addEventListener('click', function () {
+      var img = b.querySelector('img');
+      lbImg.src = img.src; lbImg.alt = img.alt;
+      if (lb.showModal) lb.showModal();
+    });
+  });
+  document.getElementById('lb-close').addEventListener('click', function () { lb.close(); });
+  lb.addEventListener('click', function (e) { if (e.target === lb) lb.close(); });
+})();
+</script>
+
+</body>
+</html>
